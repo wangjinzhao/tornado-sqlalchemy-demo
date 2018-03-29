@@ -3,6 +3,7 @@
 from sqlalchemy.ext.declarative import DeclarativeMeta
 import json
 import datetime
+import time
 
 
 class AlchemyEncoder(json.JSONEncoder):
@@ -17,7 +18,8 @@ class AlchemyEncoder(json.JSONEncoder):
                     fields[field] = data
                 except TypeError:  # 添加了对datetime的处理
                     if isinstance(data, datetime.datetime):
-                        fields[field] = data.isoformat()
+                        timeStamp = time.mktime(data.timetuple())  # datetime转为timestamp
+                        fields[field] = timeStamp
                     elif isinstance(data, datetime.date):
                         fields[field] = data.isoformat()
                     elif isinstance(data, datetime.timedelta):
